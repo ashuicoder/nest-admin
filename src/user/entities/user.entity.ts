@@ -32,4 +32,11 @@ export class UserModel extends Model<UserModel> {
   @IsEmail
   @Column
   email: string;
+
+  @Column
+  phone: string;
+
+  @AllowNull(false)
+  @Column
+  status: number;
 }

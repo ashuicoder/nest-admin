@@ -13,6 +13,7 @@ export class UserService {
     @InjectModel(UserModel)
     private userModel: typeof UserModel,
   ) {}
+
   async create(createUserDto: CreateUserDto) {
     const user = await this.userModel.findOne({
       where: {
@@ -49,6 +50,6 @@ export class UserService {
   }
 
   remove(id: number) {
-    return `This action removes a #${id} user`;
+    return this.userModel.destroy({ where: { id } });
   }
 }
