@@ -1,10 +1,17 @@
+import 'dotenv/config';
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import config from './config';
+import { ResponseInterceptor } from './common/interceptor/global-response.intercepter';
+import { GlabalExceptionFilter } from './common/filter/global-exception.filter';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
-    abortOnError: false,
-  });
-  await app.listen(process.env.APP_PORT);
+  const app = await NestFactory.create(AppModule, { abortOnError: false });
+  app.useGlobalFilters(new GlabalExceptionFilter());
+  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalInterceptors(new ResponseInterceptor());
+
+  await app.listen(config.port);
 }
 bootstrap();
