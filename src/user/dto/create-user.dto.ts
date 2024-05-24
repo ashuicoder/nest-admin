@@ -3,7 +3,7 @@ import {
   IsEmail,
   IsUrl,
   IsMobilePhone,
-  IsNumber,
+  IsInt,
 } from 'class-validator';
 
 export class CreateUserDto {
@@ -25,6 +25,6 @@ export class CreateUserDto {
   @IsMobilePhone()
   phone: string;
 
-  @IsNumber()
+  @IsInt()
   status: number;
 }

@@ -2,10 +2,12 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { GlobalPageQueryDto } from 'src/common/dto/global.dto';
+import { QueryUserDto } from './dto/query-user.dto';
+
 import { encrypPasswod } from 'src/utils';
 
 import { UserModel } from './entities/user.entity';
+import { IPageRes } from 'src/types';
 
 @Injectable()
 export class UserService {
@@ -27,8 +29,29 @@ export class UserService {
     return this.userModel.create(createUserDto);
   }
 
-  findAll(query: GlobalPageQueryDto) {
-    return query;
+  async findAll(body: QueryUserDto) {
+    const current = body.current;
+    const size = body.size;
+    delete body.current;
+    delete body.size;
+    const { count: total, rows: users } = await this.userModel.findAndCountAll({
+      limit: size,
+      offset: (current - 1) * size,
+      attributes: {
+        exclude: ['password'],
+      },
+      where: {
+        ...body,
+      },
+    });
+    const res: IPageRes<UserModel> = {
+      current,
+      size,
+      total,
+      pages: Math.ceil(total / size),
+      records: users,
+    };
+    return res;
   }
 
   async findOne(id: number) {

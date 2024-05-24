@@ -3,6 +3,8 @@ import { CreateMenuDto } from './dto/create-menu.dto';
 import { UpdateMenuDto } from './dto/update-menu.dto';
 import { MenuModel } from './entities/menu.entity';
 import { InjectModel } from '@nestjs/sequelize';
+import { QueryMenuDto } from './dto/query-menu.dto';
+import { IPageRes } from 'src/types';
 
 @Injectable()
 export class MenuService {
@@ -15,8 +17,26 @@ export class MenuService {
     return this.menuModel.create(createMenuDto);
   }
 
-  findAll() {
-    return `This action returns all menu`;
+  async findAll(body: QueryMenuDto) {
+    const current = body.current;
+    const size = body.size;
+    delete body.current;
+    delete body.size;
+    const { count: total, rows: users } = await this.menuModel.findAndCountAll({
+      limit: size,
+      offset: (current - 1) * size,
+      where: {
+        ...body,
+      },
+    });
+    const res: IPageRes<MenuModel> = {
+      current,
+      size,
+      total,
+      pages: Math.ceil(total / size),
+      records: users,
+    };
+    return res;
   }
 
   async findOne(id: number) {

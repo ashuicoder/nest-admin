@@ -11,9 +11,12 @@ import { UserModel } from './user/entities/user.entity';
 import { AuthModule } from './auth/auth.module';
 
 import { RoleModule } from './role/role.module';
+import { RoleModel } from './role/entities/role.entity';
 
 import { MenuModule } from './menu/menu.module';
 import { MenuModel } from './menu/entities/menu.entity';
+
+import { RoleUserModel } from 'src/common/model/role_user.model';
 
 const { database } = config;
 @Module({
@@ -30,7 +33,7 @@ const { database } = config;
       sync: {
         alter: true,
       },
-      models: [UserModel, MenuModel],
+      models: [UserModel, MenuModel, RoleModel, RoleUserModel],
     }),
     UserModule,
     AuthModule,

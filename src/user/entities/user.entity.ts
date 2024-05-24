@@ -5,7 +5,10 @@ import {
   AllowNull,
   Unique,
   IsEmail,
+  BelongsToMany,
 } from 'sequelize-typescript';
+import { RoleUserModel } from 'src/common/model/role_user.model';
+import { RoleModel } from 'src/role/entities/role.entity';
 
 @Table({
   modelName: 'User',
@@ -33,10 +36,14 @@ export class UserModel extends Model<UserModel> {
   @Column
   email: string;
 
+  @AllowNull(false)
   @Column
   phone: string;
 
   @AllowNull(false)
   @Column
   status: number;
+
+  @BelongsToMany(() => RoleModel, () => RoleUserModel)
+  roles: RoleModel[];
 }

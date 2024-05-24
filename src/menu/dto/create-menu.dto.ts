@@ -1,14 +1,15 @@
-import { IsNotEmpty, IsNumber } from 'class-validator';
+import { IsNotEmpty, IsInt } from 'class-validator';
+
 export class CreateMenuDto {
   @IsNotEmpty()
   name: string;
 
-  @IsNumber()
+  @IsInt()
   pid: number;
 
-  @IsNotEmpty()
+  @IsInt()
   sort: number;
 
-  @IsNumber()
+  @IsInt()
   status: number;
 }

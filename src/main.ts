@@ -9,7 +9,13 @@ import { GlabalExceptionFilter } from './common/filter/global-exception.filter';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { abortOnError: false });
   app.useGlobalFilters(new GlabalExceptionFilter());
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      stopAtFirstError: true,
+      whitelist: true,
+      transform: true,
+    }),
+  );
   app.useGlobalInterceptors(new ResponseInterceptor());
 
   await app.listen(config.port);
