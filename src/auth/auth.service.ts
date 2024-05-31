@@ -5,7 +5,6 @@ import { LoginAuthDto } from './dto/login-auth.dto';
 import { UserModel } from 'src/user/entities/user.entity';
 import { comparePassword } from 'src/utils';
 import { JwtService } from '@nestjs/jwt';
-import { CreateMenuDto } from 'src/menu/dto/create-menu.dto';
 import { MenuModel } from 'src/menu/entities/menu.entity';
 
 @Injectable()
