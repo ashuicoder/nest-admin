@@ -29,9 +29,13 @@ export class MenuModel extends Model<MenuModel> {
   @Column
   code: string;
 
-  @Default(false)
+  @Default(1)
   @Column
-  enable: boolean;
+  status: number;
+
+  @AllowNull(false)
+  @Column
+  type: number;
 
   @BelongsToMany(() => RoleModel, () => RoleMenuModel)
   roles: RoleModel[];

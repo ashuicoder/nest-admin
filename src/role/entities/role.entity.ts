@@ -21,9 +21,9 @@ export class RoleModel extends Model<RoleModel> {
   @Column
   name: string;
 
-  @Default(false)
+  @Default(1)
   @Column
-  enable: boolean;
+  status: number;
 
   @BelongsToMany(() => UserModel, () => RoleUserModel)
   users: UserModel[];

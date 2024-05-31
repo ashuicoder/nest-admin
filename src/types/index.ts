@@ -11,3 +11,8 @@ export interface IPageRes<T> {
   size: number;
   records: T[];
 }
+
+export enum Status {
+  Enabal = 1,
+  Disable = 2,
+}

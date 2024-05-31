@@ -41,9 +41,9 @@ export class UserModel extends Model<UserModel> {
   @Column
   phone: string;
 
-  @Default(false)
+  @Default(1)
   @Column
-  enable: boolean;
+  status: number;
 
   @BelongsToMany(() => RoleModel, () => RoleUserModel)
   roles: RoleModel[];

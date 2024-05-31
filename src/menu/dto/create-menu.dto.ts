@@ -1,4 +1,16 @@
-import { IsInt, IsString, IsBoolean, IsOptional } from 'class-validator';
+import {
+  IsInt,
+  IsString,
+  IsOptional,
+  IsNotEmpty,
+  IsEnum,
+} from 'class-validator';
+import { Status } from 'src/types';
+
+enum Type {
+  Option1 = 1,
+  Option2 = 2,
+}
 
 export class CreateMenuDto {
   @IsString()
@@ -10,9 +22,13 @@ export class CreateMenuDto {
   @IsInt()
   sort: number;
 
-  @IsBoolean()
+  @IsEnum(Status)
   @IsOptional()
-  enable: boolean;
+  status: Status;
+
+  @IsNotEmpty()
+  @IsEnum(Type)
+  type: Type;
 
   code: string;
 }

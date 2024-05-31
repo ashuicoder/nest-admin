@@ -1,4 +1,5 @@
-import { IsBoolean, IsInt, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsInt, IsOptional, IsString } from 'class-validator';
+import { Status } from 'src/types';
 
 export class QueryUserDto {
   @IsInt()
@@ -19,7 +20,7 @@ export class QueryUserDto {
   @IsOptional()
   account: string;
 
-  @IsBoolean()
+  @IsEnum(Status)
   @IsOptional()
-  enable: boolean;
+  enable: Status;
 }

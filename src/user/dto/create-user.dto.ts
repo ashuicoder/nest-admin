@@ -3,9 +3,10 @@ import {
   IsEmail,
   IsUrl,
   IsMobilePhone,
-  IsBoolean,
   IsOptional,
+  IsEnum,
 } from 'class-validator';
+import { Status } from 'src/types';
 
 export class CreateUserDto {
   @IsNotEmpty()
@@ -26,7 +27,7 @@ export class CreateUserDto {
   @IsMobilePhone()
   phone: string;
 
-  @IsBoolean()
+  @IsEnum(Status)
   @IsOptional()
-  enable: boolean;
+  status: Status;
 }

@@ -1,9 +1,11 @@
-import { IsBoolean, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsOptional } from 'class-validator';
+import { Status } from 'src/types';
+
 export class CreateRoleDto {
   @IsNotEmpty()
   name: string;
 
-  @IsBoolean()
+  @IsEnum(Status)
   @IsOptional()
-  enable: boolean;
+  status: Status;
 }
