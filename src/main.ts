@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import config from './config';
 import { ResponseInterceptor } from './common/interceptor/global-response.intercepter';
@@ -17,6 +18,15 @@ async function bootstrap() {
     }),
   );
   app.useGlobalInterceptors(new ResponseInterceptor());
+
+  const options = new DocumentBuilder()
+    .setTitle('后台模板开发文档')
+    .setDescription('后台模板开发文档')
+    .setVersion('1.0')
+    .addTag('cats')
+    .build();
+  const document = SwaggerModule.createDocument(app, options);
+  SwaggerModule.setup('api', app, document);
 
   await app.listen(config.port);
 }
