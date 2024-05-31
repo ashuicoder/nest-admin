@@ -1,4 +1,13 @@
-import { Column, Model, Table, AllowNull } from 'sequelize-typescript';
+import {
+  Column,
+  Model,
+  Table,
+  AllowNull,
+  BelongsToMany,
+  Default,
+} from 'sequelize-typescript';
+import { RoleMenuModel } from 'src/common/model/role_menu.model';
+import { RoleModel } from 'src/role/entities/role.entity';
 
 @Table({
   modelName: 'Menu',
@@ -20,7 +29,10 @@ export class MenuModel extends Model<MenuModel> {
   @Column
   code: string;
 
-  @AllowNull(false)
+  @Default(false)
   @Column
-  status: number;
+  enable: boolean;
+
+  @BelongsToMany(() => RoleModel, () => RoleMenuModel)
+  roles: RoleModel[];
 }

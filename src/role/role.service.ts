@@ -5,6 +5,8 @@ import { RoleModel } from './entities/role.entity';
 import { InjectModel } from '@nestjs/sequelize';
 import { QueryRoleDto } from './dto/query-role.dto';
 import { IPageRes } from 'src/types';
+import { RoleBindMenusDto } from './dto/bind-menus.dto';
+import { MenuModel } from 'src/menu/entities/menu.entity';
 
 @Injectable()
 export class RoleService {
@@ -13,7 +15,15 @@ export class RoleService {
     private roleModel: typeof RoleModel,
   ) {}
 
-  create(createRoleDto: CreateRoleDto) {
+  async create(createRoleDto: CreateRoleDto) {
+    const role = await this.roleModel.findOne({
+      where: {
+        name: createRoleDto.name,
+      },
+    });
+    if (role) {
+      throw new HttpException('角色名已存在', HttpStatus.BAD_REQUEST);
+    }
     return this.roleModel.create(createRoleDto);
   }
 
@@ -22,6 +32,7 @@ export class RoleService {
     const size = body.size;
     delete body.current;
     delete body.size;
+    console.log(body);
     const { count: total, rows: users } = await this.roleModel.findAndCountAll({
       limit: size,
       offset: (current - 1) * size,
@@ -59,5 +70,18 @@ export class RoleService {
 
   remove(id: number) {
     return this.roleModel.destroy({ where: { id } });
+  }
+
+  async bindMenus(id: number, roleBindMenusDto: RoleBindMenusDto) {
+    const user = await this.roleModel.findByPk(id);
+
+    if (!user) {
+      throw new HttpException('角色不存在', HttpStatus.BAD_REQUEST);
+    }
+    const menus = await MenuModel.findAll({
+      where: { id: roleBindMenusDto.menus },
+    });
+    await user.$remove('menus', user.id);
+    return user.$set('menus', menus);
   }
 }

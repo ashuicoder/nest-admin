@@ -32,4 +32,9 @@ export class MenuController {
   remove(@Param('id') id: number) {
     return this.menuService.remove(id);
   }
+
+  @Post('tree')
+  tree() {
+    return this.menuService.tree();
+  }
 }

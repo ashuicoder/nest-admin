@@ -8,6 +8,8 @@ import { encrypPasswod } from 'src/utils';
 
 import { UserModel } from './entities/user.entity';
 import { IPageRes } from 'src/types';
+import { UserBindRolesDto } from './dto/bind-roles.dto';
+import { RoleModel } from 'src/role/entities/role.entity';
 
 @Injectable()
 export class UserService {
@@ -74,5 +76,18 @@ export class UserService {
 
   remove(id: number) {
     return this.userModel.destroy({ where: { id } });
+  }
+
+  async bindRoles(id: number, userBindRolesDto: UserBindRolesDto) {
+    const user = await this.userModel.findByPk(id);
+
+    if (!user) {
+      throw new HttpException('用户不存在', HttpStatus.BAD_REQUEST);
+    }
+    const roles = await RoleModel.findAll({
+      where: { id: userBindRolesDto.roles },
+    });
+    await user.$remove('roles', user.id);
+    return user.$set('roles', roles);
   }
 }

@@ -5,6 +5,7 @@ import { MenuModel } from './entities/menu.entity';
 import { InjectModel } from '@nestjs/sequelize';
 import { QueryMenuDto } from './dto/query-menu.dto';
 import { IPageRes } from 'src/types';
+import { generateUniqueCode, listToTree, type TreeNode } from 'src/utils';
 
 @Injectable()
 export class MenuService {
@@ -13,8 +14,25 @@ export class MenuService {
     private menuModel: typeof MenuModel,
   ) {}
 
-  create(createMenuDto: CreateMenuDto) {
-    return this.menuModel.create(createMenuDto);
+  async create(createMenuDto: CreateMenuDto) {
+    const data: CreateMenuDto = createMenuDto;
+    const code = generateUniqueCode();
+    if (data.pid !== 0) {
+      const parentMenu = await this.menuModel.findByPk(data.pid);
+      if (!parentMenu) {
+        throw new HttpException('父级菜单不存在', HttpStatus.BAD_REQUEST);
+      }
+    }
+    const menu = await this.menuModel.findOne({
+      where: {
+        code,
+      },
+    });
+    if (menu) {
+      throw new HttpException('菜单编码重复', HttpStatus.BAD_REQUEST);
+    }
+    data.code = code;
+    return this.menuModel.create(data);
   }
 
   async findAll(body: QueryMenuDto) {
@@ -59,5 +77,12 @@ export class MenuService {
 
   remove(id: number) {
     return this.menuModel.destroy({ where: { id } });
+  }
+  async tree() {
+    const menus = await this.menuModel.findAll();
+    const menuTree = listToTree(
+      menus.map((item) => item.dataValues) as TreeNode[],
+    );
+    return menuTree;
   }
 }

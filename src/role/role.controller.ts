@@ -3,6 +3,7 @@ import { RoleService } from './role.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { QueryRoleDto } from './dto/query-role.dto';
+import { RoleBindMenusDto } from './dto/bind-menus.dto';
 
 @Controller('role')
 export class RoleController {
@@ -31,5 +32,14 @@ export class RoleController {
   @Post('delete/:id')
   remove(@Param('id') id: number) {
     return this.roleService.remove(id);
+  }
+
+  @Post('bind/menus/:id')
+  bindMenus(
+    @Param('id') id: number,
+    @Body()
+    body: RoleBindMenusDto,
+  ) {
+    return this.roleService.bindMenus(id, body);
   }
 }

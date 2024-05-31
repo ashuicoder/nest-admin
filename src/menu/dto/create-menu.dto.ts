@@ -1,7 +1,7 @@
-import { IsNotEmpty, IsInt } from 'class-validator';
+import { IsInt, IsString, IsBoolean, IsOptional } from 'class-validator';
 
 export class CreateMenuDto {
-  @IsNotEmpty()
+  @IsString()
   name: string;
 
   @IsInt()
@@ -10,6 +10,9 @@ export class CreateMenuDto {
   @IsInt()
   sort: number;
 
-  @IsInt()
-  status: number;
+  @IsBoolean()
+  @IsOptional()
+  enable: boolean;
+
+  code: string;
 }

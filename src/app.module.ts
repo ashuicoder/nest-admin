@@ -17,6 +17,7 @@ import { MenuModule } from './menu/menu.module';
 import { MenuModel } from './menu/entities/menu.entity';
 
 import { RoleUserModel } from 'src/common/model/role_user.model';
+import { RoleMenuModel } from './common/model/role_menu.model';
 
 const { database } = config;
 @Module({
@@ -33,7 +34,7 @@ const { database } = config;
       sync: {
         alter: true,
       },
-      models: [UserModel, MenuModel, RoleModel, RoleUserModel],
+      models: [UserModel, MenuModel, RoleModel, RoleUserModel, RoleMenuModel],
     }),
     UserModule,
     AuthModule,

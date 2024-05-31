@@ -6,6 +6,7 @@ import {
   Unique,
   IsEmail,
   BelongsToMany,
+  Default,
 } from 'sequelize-typescript';
 import { RoleUserModel } from 'src/common/model/role_user.model';
 import { RoleModel } from 'src/role/entities/role.entity';
@@ -40,9 +41,9 @@ export class UserModel extends Model<UserModel> {
   @Column
   phone: string;
 
-  @AllowNull(false)
+  @Default(false)
   @Column
-  status: number;
+  enable: boolean;
 
   @BelongsToMany(() => RoleModel, () => RoleUserModel)
   roles: RoleModel[];

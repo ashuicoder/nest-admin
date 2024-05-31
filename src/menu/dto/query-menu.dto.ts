@@ -1,6 +1,8 @@
-import { IsInt } from 'class-validator';
+import { IsBoolean, IsInt, IsOptional, IsString } from 'class-validator';
 
 export class QueryMenuDto {
+  @IsInt()
+  @IsOptional()
   id: number;
 
   @IsInt()
@@ -9,9 +11,15 @@ export class QueryMenuDto {
   @IsInt()
   size: number;
 
+  @IsString()
+  @IsOptional()
   name: string;
 
+  @IsString()
+  @IsOptional()
   code: string;
 
-  status: number;
+  @IsBoolean()
+  @IsOptional()
+  enable: boolean;
 }

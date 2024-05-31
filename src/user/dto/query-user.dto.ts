@@ -1,6 +1,8 @@
-import { IsInt } from 'class-validator';
+import { IsBoolean, IsInt, IsOptional, IsString } from 'class-validator';
 
 export class QueryUserDto {
+  @IsInt()
+  @IsOptional()
   id: number;
 
   @IsInt()
@@ -9,9 +11,15 @@ export class QueryUserDto {
   @IsInt()
   size: number;
 
+  @IsString()
+  @IsOptional()
   username: string;
 
+  @IsString()
+  @IsOptional()
   account: string;
 
-  status: number;
+  @IsBoolean()
+  @IsOptional()
+  enable: boolean;
 }
