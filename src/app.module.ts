@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 import config from './config';
 import { AppController } from './app.controller';
@@ -18,10 +19,14 @@ import { MenuModel } from './menu/entities/menu.entity';
 
 import { RoleUserModel } from 'src/common/model/role_user.model';
 import { RoleMenuModel } from './common/model/role_menu.model';
+import { join } from 'path';
 
 const { database } = config;
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'), // 使用绝对路径到你的静态文件夹
+    }),
     SequelizeModule.forRoot({
       dialect: 'mysql',
       host: database.host,
