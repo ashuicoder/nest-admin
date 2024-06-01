@@ -1,4 +1,4 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsInt, IsNotEmpty } from 'class-validator';
 
 export class LoginAuthDto {
   @IsNotEmpty()
@@ -6,4 +6,10 @@ export class LoginAuthDto {
 
   @IsNotEmpty()
   password: string;
+
+  @IsInt()
+  validId: number;
+
+  @IsInt()
+  answer: number | string;
 }

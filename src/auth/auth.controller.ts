@@ -17,4 +17,10 @@ export class AuthController {
   getAuthMenus(@Req() request: Request) {
     return this.authService.getAuthMenus(request);
   }
+
+  @Public()
+  @Post('code')
+  getAuthCode() {
+    return this.authService.getAuthCode();
+  }
 }

@@ -6,18 +6,36 @@ import { UserModel } from 'src/user/entities/user.entity';
 import { comparePassword } from 'src/utils';
 import { JwtService } from '@nestjs/jwt';
 import { MenuModel } from 'src/menu/entities/menu.entity';
+import { AuthModel } from './entities/auth.entity';
+
+import { AlgebraicCaptcha } from 'algebraic-captcha';
+import * as dayjs from 'dayjs';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectModel(UserModel)
     private userModel: typeof UserModel,
+
+    @InjectModel(AuthModel)
+    private authModel: typeof AuthModel,
+
     private jwtService: JwtService,
   ) {}
   async login(loginAuthDto: LoginAuthDto) {
+    const { account, validId, answer } = loginAuthDto;
+
+    const validInfo = await this.authModel.findByPk(validId);
+
+    if (!validInfo || validInfo.answer !== answer) {
+      throw new HttpException('验证码错误', HttpStatus.BAD_REQUEST);
+    } else if (dayjs().diff(dayjs(validInfo.createdAt), 'minute') > 5) {
+      throw new HttpException('验证码已过期', HttpStatus.BAD_REQUEST);
+    }
+
     const user = await this.userModel.findOne({
       where: {
-        account: loginAuthDto.account,
+        account,
       },
     });
     if (!user) {
@@ -62,5 +80,26 @@ export class AuthService {
     });
 
     return filterMenus;
+  }
+
+  async getAuthCode() {
+    const algebraicCaptcha = new AlgebraicCaptcha({
+      width: 200,
+      height: 200,
+      background: '#ffffff',
+      noise: 1,
+      minValue: 1,
+      maxValue: 10,
+      operandAmount: 1,
+      operandTypes: ['+', '-'],
+      mode: 'formula',
+      targetSymbol: '?',
+    });
+
+    const { image, answer } = await algebraicCaptcha.generateCaptcha();
+    this.authModel.create({
+      answer,
+    });
+    return image;
   }
 }
