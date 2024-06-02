@@ -5,6 +5,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { Public } from 'src/common/decorator';
 import { QueryUserDto } from './dto/query-user.dto';
 import { UserBindRolesDto } from './dto/bind-roles.dto';
+import { PwdUserDto } from './dto/pwd-user.dto';
 
 @Controller('user')
 export class UserController {
@@ -50,5 +51,15 @@ export class UserController {
     body: UserBindRolesDto,
   ) {
     return this.userService.bindRoles(id, body);
+  }
+
+  @Post('updatePwd/:id')
+  updatePwd(
+    @Param('id') id: number,
+
+    @Body()
+    body: PwdUserDto,
+  ) {
+    return this.userService.updatePwd(id, body);
   }
 }

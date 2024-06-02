@@ -10,12 +10,18 @@ import { UserModel } from './entities/user.entity';
 import { IPageRes } from 'src/types';
 import { UserBindRolesDto } from './dto/bind-roles.dto';
 import { RoleModel } from 'src/role/entities/role.entity';
+import { PwdUserDto } from './dto/pwd-user.dto';
+import { AuthModel } from 'src/auth/entities/auth.entity';
+import * as dayjs from 'dayjs';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(UserModel)
     private userModel: typeof UserModel,
+
+    @InjectModel(AuthModel)
+    private authModel: typeof AuthModel,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
@@ -89,5 +95,35 @@ export class UserService {
     });
     await user.$remove('roles', user.id);
     return user.$set('roles', roles);
+  }
+
+  async updatePwd(id: number, pwdUserDto: PwdUserDto) {
+    const { validId, answer } = pwdUserDto;
+
+    const validInfo = await this.authModel.findByPk(validId);
+
+    if (!validInfo || validInfo.answer !== answer) {
+      throw new HttpException('验证码错误', HttpStatus.BAD_REQUEST);
+    } else if (dayjs().diff(dayjs(validInfo.createdAt), 'minute') > 5) {
+      throw new HttpException('验证码已过期', HttpStatus.BAD_REQUEST);
+    }
+    const user = await this.userModel.findByPk(id);
+    if (!user) {
+      throw new HttpException('用户不存在', HttpStatus.BAD_REQUEST);
+    }
+
+    this.authModel.destroy({ where: { id: validId } });
+
+    const pwd = await encrypPasswod(pwdUserDto.pwd);
+    await this.userModel.update(
+      { password: pwd },
+      {
+        where: {
+          id,
+        },
+      },
+    );
+
+    return true;
   }
 }

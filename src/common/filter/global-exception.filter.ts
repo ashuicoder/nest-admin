@@ -13,6 +13,8 @@ export class GlabalExceptionFilter implements ExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
+
+    console.log(exception);
     const status =
       exception instanceof HttpException
         ? exception.getStatus()

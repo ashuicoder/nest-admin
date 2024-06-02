@@ -2,6 +2,7 @@ import { Controller, Post, Body, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginAuthDto } from './dto/login-auth.dto';
 import { Public } from 'src/common/decorator';
+import { PwdAuthDto } from './dto/pwd-auth.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -22,5 +23,10 @@ export class AuthController {
   @Post('code')
   getAuthCode() {
     return this.authService.getAuthCode();
+  }
+
+  @Post('pwd')
+  updatePwd(@Req() request: Request, @Body() body: PwdAuthDto) {
+    return this.authService.updatePwd(request, body);
   }
 }
