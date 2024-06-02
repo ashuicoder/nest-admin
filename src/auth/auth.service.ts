@@ -11,6 +11,7 @@ import { AuthModel } from './entities/auth.entity';
 import { AlgebraicCaptcha } from 'algebraic-captcha';
 import * as dayjs from 'dayjs';
 import { PwdAuthDto } from './dto/pwd-auth.dto';
+import { Status } from 'src/types';
 
 @Injectable()
 export class AuthService {
@@ -67,7 +68,11 @@ export class AuthService {
     const menus: MenuModel[] = [];
 
     for (let i = 0; i < roles.length; i++) {
-      const menu = await roles[i].$get('menus');
+      const menu = await roles[i].$get('menus', {
+        where: {
+          status: Status.Enabal,
+        },
+      });
       menus.push(...(menu as any));
     }
 
