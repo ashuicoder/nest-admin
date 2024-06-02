@@ -9,6 +9,7 @@ import { GlabalExceptionFilter } from './common/filter/global-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { abortOnError: false });
+  app.setGlobalPrefix('api');
   app.useGlobalFilters(new GlabalExceptionFilter());
   app.useGlobalPipes(
     new ValidationPipe({
