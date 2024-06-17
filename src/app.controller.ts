@@ -8,13 +8,25 @@ import { AppService } from './app.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname, join } from 'path';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags, ApiConsumes, ApiBody } from '@nestjs/swagger';
 
 @ApiTags('基础接口')
 @Controller('/basic')
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  @ApiConsumes('multipart/form-data')
   @ApiOperation({ summary: '上传文件' })
   @Post('upload')
   @UseInterceptors(

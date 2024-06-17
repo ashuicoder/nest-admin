@@ -25,6 +25,7 @@ async function bootstrap() {
     .setVersion('1.0')
     .setDescription(
       `<ul>
+        <li>除上传文件接口外，所有接口的Content-Type为application/json</li>
         <li>本接口文档所有的status字段说明：1为启用状态，2为禁用状态</li>
         <li>所有接口必须以响应状态吗为2开头且code=0才能代表接口请求成功</li>
       </ul>`,
