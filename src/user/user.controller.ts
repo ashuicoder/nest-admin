@@ -2,7 +2,7 @@ import { Controller, Post, Body, Param, ParseArrayPipe } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { Public } from 'src/common/decorator';
+// import { Public } from 'src/common/decorator';
 import { QueryUserDto } from './dto/query-user.dto';
 import { UserBindRolesDto } from './dto/bind-roles.dto';
 import { PwdUserDto } from './dto/pwd-user.dto';
@@ -14,7 +14,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @ApiOperation({ summary: '新增用户' })
-  @Public()
+  // @Public()
   @Post('add')
   create(
     @Body()
