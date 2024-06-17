@@ -1,6 +1,5 @@
 import {
   Controller,
-  Get,
   Post,
   UploadedFile,
   UseInterceptors,
@@ -9,16 +8,14 @@ import { AppService } from './app.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname, join } from 'path';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('基础接口')
 @Controller('/basic')
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
-  }
-
+  @ApiOperation({ summary: '上传文件' })
   @Post('upload')
   @UseInterceptors(
     FileInterceptor('file', {

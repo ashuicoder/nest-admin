@@ -21,10 +21,8 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ResponseInterceptor());
 
   const options = new DocumentBuilder()
-    .setTitle('后台模板开发文档')
-    .setDescription('后台模板开发文档')
+    .setTitle('接口文档')
     .setVersion('1.0')
-    .addTag('cats')
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api', app, document);
