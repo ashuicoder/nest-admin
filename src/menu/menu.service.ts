@@ -79,10 +79,36 @@ export class MenuService {
     return this.menuModel.destroy({ where: { id } });
   }
   async tree() {
-    const menus = await this.menuModel.findAll();
+    const menus = await this.menuModel.findAll({});
     const menuTree = listToTree(
       menus.map((item) => item.dataValues) as TreeNode[],
     );
     return menuTree;
+  }
+
+  async menuTree() {
+    const menus = await this.menuModel.findAll({
+      where: {
+        type: 1,
+      },
+    });
+    const menuTree = listToTree(
+      menus.map((item) => item.dataValues) as TreeNode[],
+    );
+    return menuTree;
+  }
+
+  async buttons(id: number) {
+    const menu = await this.menuModel.findByPk(id);
+    if (!menu) {
+      throw new HttpException('菜单不存在', HttpStatus.BAD_REQUEST);
+    }
+
+    return this.menuModel.findAll({
+      where: {
+        type: 2,
+        pid: id,
+      },
+    });
   }
 }

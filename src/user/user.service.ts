@@ -13,6 +13,7 @@ import { RoleModel } from 'src/role/entities/role.entity';
 import { PwdUserDto } from './dto/pwd-user.dto';
 import { AuthModel } from 'src/auth/entities/auth.entity';
 import * as dayjs from 'dayjs';
+import { adminName } from 'src/auth/const';
 
 @Injectable()
 export class UserService {
@@ -73,6 +74,9 @@ export class UserService {
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
+    if (updateUserDto.account === adminName) {
+      throw new HttpException('admin账号不能编辑', HttpStatus.BAD_REQUEST);
+    }
     const user = await this.userModel.findByPk(id);
     if (!user) {
       throw new HttpException('用户不存在', HttpStatus.BAD_REQUEST);
@@ -80,7 +84,14 @@ export class UserService {
     return this.userModel.update(updateUserDto, { where: { id } });
   }
 
-  remove(id: number) {
+  async remove(id: number) {
+    const user = await this.userModel.findByPk(id);
+    if (!user) {
+      throw new HttpException('用户不存在', HttpStatus.BAD_REQUEST);
+    }
+    if (user.account === adminName) {
+      throw new HttpException('admin账号不能删除', HttpStatus.BAD_REQUEST);
+    }
     return this.userModel.destroy({ where: { id } });
   }
 
@@ -90,6 +101,11 @@ export class UserService {
     if (!user) {
       throw new HttpException('用户不存在', HttpStatus.BAD_REQUEST);
     }
+
+    if (user.account === adminName) {
+      throw new HttpException('admin账号不能定角色', HttpStatus.BAD_REQUEST);
+    }
+
     const roles = await RoleModel.findAll({
       where: { id: userBindRolesDto.roles },
     });

@@ -8,10 +8,11 @@ import { jwtConstants } from './const';
 import { AuthGuard } from './auth.gaurd';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthModel } from './entities/auth.entity';
+import { MenuModel } from 'src/menu/entities/menu.entity';
 
 @Module({
   imports: [
-    SequelizeModule.forFeature([UserModel, AuthModel]),
+    SequelizeModule.forFeature([UserModel, AuthModel, MenuModel]),
     JwtModule.register({
       global: true,
       secret: jwtConstants.secret,

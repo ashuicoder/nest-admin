@@ -40,9 +40,21 @@ export class MenuController {
     return this.menuService.remove(id);
   }
 
-  @ApiOperation({ summary: '获取完整菜单树' })
+  @ApiOperation({ summary: '获取完整菜单树,包含按钮' })
   @Post('tree')
   tree() {
     return this.menuService.tree();
+  }
+
+  @ApiOperation({ summary: '获取完整菜单树,不包含按钮' })
+  @Post('treeMenu')
+  menuTree() {
+    return this.menuService.tree();
+  }
+
+  @ApiOperation({ summary: '根据菜单获取按钮列表' })
+  @Post('buttons/:id')
+  buttons(@Param('id') id: number) {
+    return this.menuService.buttons(id);
   }
 }

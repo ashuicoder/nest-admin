@@ -30,5 +30,5 @@ export class CreateMenuDto {
   @IsEnum(Type)
   type: Type;
 
-  code: string;
+  code?: string;
 }

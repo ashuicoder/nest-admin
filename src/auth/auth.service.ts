@@ -22,6 +22,9 @@ export class AuthService {
     @InjectModel(AuthModel)
     private authModel: typeof AuthModel,
 
+    @InjectModel(MenuModel)
+    private menuModel: typeof MenuModel,
+
     private jwtService: JwtService,
   ) {}
   async login(loginAuthDto: LoginAuthDto) {
@@ -61,6 +64,14 @@ export class AuthService {
     const user = await this.userModel.findByPk(userId);
     if (!user) {
       throw new HttpException('用户不存在', HttpStatus.BAD_REQUEST);
+    }
+
+    if (user.account === 'admin') {
+      return this.menuModel.findAll({
+        where: {
+          status: Status.Enabal,
+        },
+      });
     }
 
     const roles = await user.$get('roles');
