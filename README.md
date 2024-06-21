@@ -24,3 +24,7 @@ pnpm i
 ```bash
 pnpm start:dev
 ```
+
+# 接口文档
+
+运行后，访问`http://localhost:3000/api`即可查看接口文档。
